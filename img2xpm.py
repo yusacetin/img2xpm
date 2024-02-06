@@ -54,6 +54,28 @@ def get_number_of_letters(img):
     number_of_letters = math.ceil(log_val)
     return number_of_letters
 
+def get_output_filename():
+    name = ""
+    original_file_extension = os.path.splitext(sys.argv[1])[1]
+    if (len(original_file_extension) > 0):
+        name = sys.argv[1].replace(original_file_extension, ".xpm")
+    else:
+        name = sys.argv[1] + ".xpm"
+    if "/" in name:
+        name = name.rsplit("/", 1)[1]
+    return name
+
+def get_xpm_name():
+    name = ""
+    original_file_extension = os.path.splitext(sys.argv[1])[1]
+    if (len(original_file_extension) > 0):
+        name = sys.argv[1].replace(original_file_extension, "_xpm").replace("-", "_")
+    else:
+        name = (sys.argv[1] + "_xpm").replace("-", "_")
+    if "/" in name:
+        name = name.rsplit("/", 1)[1]
+    return name
+
 def main():
     xpm = XPM_HEADER
     img = Image.open(sys.argv[1]).convert("RGBA")
@@ -79,18 +101,13 @@ def main():
             xpm_body += ("\"" + row + "\",\n")
         else:
             xpm_body += ("\"" + row + "\"}};")
-    
     xpm += xpm_body
-    original_file_extension = os.path.splitext(sys.argv[1])[1]
-    if (len(original_file_extension) > 0):
-        name = sys.argv[1].replace(original_file_extension, ".xpm")
-    else:
-        name = sys.argv[1] + ".xpm"
-    if "/" in name:
-        name = name.rsplit("/", 1)[1]
-    xpm = xpm.format(NAME=name, WIDTH=img.width, HEIGHT=img.height, NUM=len(list(colors.keys())), CHARS=number_of_letters)
 
-    f = open(name, "w")
+    xpm_name = get_xpm_name()
+    xpm = xpm.format(NAME=xpm_name, WIDTH=img.width, HEIGHT=img.height, NUM=len(list(colors.keys())), CHARS=number_of_letters)
+
+    filename = get_output_filename()
+    f = open(filename, "w")
     f.write(xpm)
     f.close()
 
