@@ -3,6 +3,7 @@ Converts various image formats to XPM losslessly. Not the best way to do it but 
 
 #### How to use
 `python img2xpm.py [IMAGE FILE PATH]`
+
 Outputs a file named [IMAGE FILE PATH].xpm
 
 #### License
